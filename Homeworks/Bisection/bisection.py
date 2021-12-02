@@ -2,6 +2,8 @@ from matplotlib import pyplot as pt
 import numpy as np
 
 
+# The equation is x^3 - 0.18 * (x^2) + 4.752e-4, where x is the depth to be found (in meter)
+
 def evaluate(x):
     return x ** 3 - 0.18 * (x ** 2) + 4.752e-4
 
@@ -11,9 +13,10 @@ def plot():
     pt.plot(xpoints, evaluate(xpoints))
     pt.grid(True, which='both')
     pt.axhline(y=0, color='g')
-    pt.xlabel("x")
-    pt.ylabel("f(x)")
-    pt.title("Graph for Visual Representation")
+    pt.xlabel("x (meter)", fontdict={'fontname': 'Comic Sans MS'})
+    pt.ylabel("f(x)", fontdict={'fontname': 'Comic Sans MS'})
+    pt.title("Graph for Visual Representation", fontdict={
+             'fontname': 'Comic Sans MS', 'fontsize': 20})
     pt.plot(0, evaluate(0), 'co')
     pt.plot(0.12, evaluate(0.12), 'co')
     pt.show()
@@ -78,5 +81,9 @@ def show_table(low, high, error_limit, max_iteration):
 
 
 plot()
-print(bisection(0, 0.12, 0.5, 20))
+
+# After seeing the plot, we are taking our guesses to be 0m and 0.12m respectively
+soln = bisection(0, 0.12, 0.5, 20)
+print(
+    f'The depth to which the ball is submerged is {format(soln*100, ".6f")} cm')
 show_table(0, 0.12, 0.5, 20)
