@@ -1,4 +1,4 @@
-import matplotlib.pyplot as pt
+from matplotlib import pyplot as pt
 import numpy as np
 
 
@@ -10,7 +10,7 @@ def plot():
     xpoints = np.arange(-20, 20, step=0.01)
     ypoints = xpoints ** 3 - 0.18 * (xpoints**2) + 4.752e-4
     pt.plot(xpoints, ypoints)
-    pt.plot(xpoints, np.zeros((len(xpoints)), dtype=int))
+    pt.axhline()
     pt.xlabel("x")
     pt.ylabel("f(x) = x^3 - 0.18 * (x^2) + 0.0004752")
     pt.show()
