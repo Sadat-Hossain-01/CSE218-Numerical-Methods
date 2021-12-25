@@ -48,16 +48,20 @@ def GaussianElimination(A, B, pivot=True, showall=True):
     return matAns
 
 
-n = int(input())
-matA = np.empty((n, n))
-matB = np.empty((n, 1))
-for i in range(n):
-    matA[i] = [float(x) for x in input().split()]
+# n = int(input())
+# matA = np.empty((n, n))
+# matB = np.empty((n, 1))
+# for i in range(n):
+#     matA[i] = [float(x) for x in input().split()]
 
-for i in range(n):
-    matB[i][0] = float(input())
+# for i in range(n):
+#     matB[i][0] = float(input())
 
-# matA = np.array([[25, 5, 1], [64, 8, 1], [144, 12, 1]], dtype='float64')
-# matB = np.array([[106.8], [177.2], [279.2]], dtype='float64')
-# print(matA, matB, sep='\n\n', end='\n\n')
-print(f'Solution Vector:\n{GaussianElimination(matA, matB, pivot=True, showall=True)}')
+n = 3
+matA = np.array([[25, 5, 1], [64, 8, 1], [144, 12, 1]], dtype='float64')
+matB = np.array([[106.8], [177.2], [279.2]], dtype='float64')
+print(matA, matB, sep='\n\n', end='\n\n')
+ret = GaussianElimination(matA, matB, pivot=True, showall=True)
+print('Solution Vector:')
+for i in range(n):
+    print(ret[i][0])
