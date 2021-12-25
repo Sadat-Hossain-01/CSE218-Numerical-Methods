@@ -1,4 +1,5 @@
 import numpy as np
+import sympy as sp
 np.set_printoptions(suppress=True, formatter={'float': '{:0.6f}'.format})
 # Book Problem E-3
 # v = b_0 + b_1(t-t_0) + b_2(t-t_0)(t-t_1) + b_3(t-t_0)(t-t_1)(t-t_2)
@@ -36,3 +37,18 @@ for term in range(0, 4):
     print(term, this)
     ans += this
 print(f'at t = 16 seconds, velocity = {ans}')
+
+# Distance covered from 11 to 16 seconds
+t = sp.Symbol('t')
+v = b[0] + b[1] * (t-xval[0]) + b[2] * (t-xval[0]) * (t-xval[1]) + b[3] * (t-xval[0]) * (t-xval[1]) * (t-xval[2])
+s = sp.integrate(v)
+print(f'v = {v}')
+print(f's = {s}')
+s = sp.lambdify(t, s)
+print(f'Distance covered from 11 to 16 seconds = {s(16) - s(11)} m')
+
+# Accelerationa t t=16
+a = sp.diff(v)
+print(f'a = {a}')
+a = sp.lambdify(t, a)
+print(f'Acceleration at t=16 second = {a(16)}')
