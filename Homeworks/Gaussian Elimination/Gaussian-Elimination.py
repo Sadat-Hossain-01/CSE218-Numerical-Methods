@@ -1,6 +1,11 @@
 # x^2 + y^2 + ax + by + c = 0 passes through (-2, 0), (-1, 7), (5, -1)
 # Answer for the above sample should be (a, b, c) = (-4, -6, -12)
 
+# -2a + c = -4
+# -a + 7b + c = -50
+# 5a - b + c = -26
+
+
 import numpy as np
 np.set_printoptions(suppress=True, formatter={'float': '{:0.4f}'.format})
 
@@ -60,8 +65,9 @@ def GaussianElimination(A, B, pivot=True, showall=True):
 n = 3
 matA = np.array([[25, 5, 1], [64, 8, 1], [144, 12, 1]], dtype='float64')
 matB = np.array([[106.8], [177.2], [279.2]], dtype='float64')
-print(matA, matB, sep='\n\n', end='\n\n')
-ret = GaussianElimination(matA, matB, pivot=True, showall=True)
+# print(matA, matB, sep='\n\n', end='\n\n')
+
+ret = GaussianElimination(matA, matB)
 print('Solution Vector:')
 for i in range(n):
-    print(ret[i][0])
+    print(f'{ret[i][0]:.4f}')
