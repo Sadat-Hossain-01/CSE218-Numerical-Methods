@@ -73,12 +73,15 @@ def newton_interpolation(xvalues, yvalues, order, x):
             this *= (x - taken_x[j])
         ans += this
     
-    xx = np.arange(taken_x[0], taken_x[required-1], 0.01)
-    pt.plot(xx, func(xx, b, taken_x), "g")
+    # xx = np.arange(taken_x[0], taken_x[required-1], 0.01)
+    # pt.plot(xx, func(xx, b, taken_x), "g")
+    xlist = list();
     pt.grid(True, which="both")
     for i in range(required):
+        xlist.append(taken_x[i])
         pt.plot(taken_x[i], taken_y[i], "co")
     pt.plot(x, ans, "co")
+    pt.plot(np.array(xlist), func(np.array(xlist), b, taken_x))
     pt.legend(["Estimation"])
     pt.show()   
     
