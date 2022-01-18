@@ -1,9 +1,8 @@
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as pt
-np.set_printoptions(suppress=True, formatter={'float': '{:0.4f}'.format})
 
-def func(x, b, taken_x):
-    return b[0] + b[1] * (x - taken_x[0]) + b[2] * (x-taken_x[0]) * (x-taken_x[1]) + b[3] * (x-taken_x[0]) * (x-taken_x[1]) * (x-taken_x[2])
+np.set_printoptions(suppress=True, formatter={'float': '{:0.4f}'.format})
 
 def findNearestPoints(xvalues, yvalues, required, x):
     INF = 1000000000
@@ -44,13 +43,12 @@ def findNearestPoints(xvalues, yvalues, required, x):
         taken_x[i] = xvalues[taken_x[i]]
     return taken_x, taken_y
 
-def newton_interpolation(xvalues, yvalues, order, x):
+def newton_interpolation(taken_x, taken_y, order, x):
     EPS = 1e-8
-    for i in range (len(xvalues)):
+    required = order + 1
+    for i in range (required):
         if abs(xvalues[i] - x) <= EPS:
             return yvalues[i]
-    required = order + 1
-    taken_x, taken_y = findNearestPoints(xvalues, yvalues, required, x)
     difference_table = np.empty((required, required))
 
     for length in range(0, required):
@@ -71,33 +69,35 @@ def newton_interpolation(xvalues, yvalues, order, x):
         for j in range(term):
             this *= (x - taken_x[j])
         ans += this
-    
-    # xx = np.arange(taken_x[0], taken_x[required-1], 0.01)
-    # pt.plot(xx, func(xx, b, taken_x), "g")
-    xlist = list();
-    pt.grid(True, which="both")
-    for i in range(required):
-        xlist.append(taken_x[i])
-        pt.plot(taken_x[i], taken_y[i], "co")
-    pt.plot(x, ans, "co")
-    pt.plot(np.array(xlist), func(np.array(xlist), b, taken_x))
-    pt.legend(["Estimation"])
-    pt.show()   
-    
     return ans
 
+data = pd.read_csv("dissolveO2.csv").to_numpy()
+print(data)
+
+# xxx = np.array(data['month_number'])
+# yy1 = np.array(data['month_number'])
+# yy2 = np.array(data['month_number'])
+
 xvalues = list()
-yvalues = list()
-with open("gene.txt", "r") as file:
-    for line in file:
-        xvalues.append(float(line.split()[0]))
-        yvalues.append(float(line.split()[1]))
-print(newton_interpolation(xvalues, yvalues, 3, 17))
+y1values = list()
+y2values = list()
+for line in data:
+    xvalues.append(line[0])
+    y1values.append(line[1])
+    y2values.append(line[2])
+    
+# inp = float(input())
+inp = 26
+taken_x, taken_y1 = findNearestPoints(xvalues, y1values, 5, inp)
+taken_x, taken_y2 = findNearestPoints(xvalues, y2values, 5, inp)
+print(taken_x)
+one = newton_interpolation(taken_x, taken_y1, 4, inp)
+two = newton_interpolation(taken_x, taken_y2, 4, inp)
+print(one, two)
 
+pt.grid(True, which="both")
+pt.plot(xvalues, y1values, xvalues, y2values, [inp, inp], [0, one], [inp, inp], [0, two])
+pt.legend(["1bar", "2bar", "estimate1bar", "estimate2bar"])
+pt.show()
 
-            
-            
-
-
-
-
+    

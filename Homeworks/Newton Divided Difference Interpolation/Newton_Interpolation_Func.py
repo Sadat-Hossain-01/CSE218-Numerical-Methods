@@ -2,13 +2,8 @@ import numpy as np
 np.set_printoptions(suppress=True, formatter={'float': '{:0.4f}'.format})
 
 def findNearestPoints(xvalues, yvalues, required, x):
-    EPS = 1e-8
     INF = 1000000000
     n = len(xvalues)
-
-    for i in range (n):
-        if abs(xvalues[i] - x) <= EPS:
-            return yvalues[i]
             
     right_idx = -1
     for i in range(n):
@@ -46,6 +41,10 @@ def findNearestPoints(xvalues, yvalues, required, x):
     return taken_x, taken_y
 
 def newton_interpolation(xvalues, yvalues, order, x):
+    EPS = 1e-8
+    for i in range (len(xvalues)):
+        if abs(xvalues[i] - x) <= EPS:
+            return yvalues[i]
     required = order + 1
     taken_x, taken_y = findNearestPoints(xvalues, yvalues, required, x)
     difference_table = np.empty((required, required))

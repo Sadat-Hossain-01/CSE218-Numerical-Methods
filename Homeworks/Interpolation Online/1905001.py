@@ -1,7 +1,9 @@
 import numpy as np
+import matplotlib.pyplot as pt
+
 np.set_printoptions(suppress=True, formatter={'float': '{:0.4f}'.format})
 
-def findNearestPoints(xvalues, yvalues, required, x):
+def findNearestPoints(xvalues, yvalues, requiredPoints, x):
     INF = 1000000000
     n = len(xvalues)
             
@@ -18,7 +20,7 @@ def findNearestPoints(xvalues, yvalues, required, x):
     left_idx = left_idx - 1
     right_idx = right_idx + 1
     
-    while done < required:
+    while done < requiredPoints:
         ld, rd = INF, INF
         if left_idx >= 0:
             ld = abs(xvalues[left_idx] - x)
@@ -33,20 +35,17 @@ def findNearestPoints(xvalues, yvalues, required, x):
         done = done + 1
 
     taken_x = np.sort(taken_x)
-    taken_y = np.empty(required)
+    taken_y = np.empty(requiredPoints)
     
-    for i in range(required):
+    for i in range(requiredPoints):
         taken_y[i] = yvalues[taken_x[i]]
         taken_x[i] = xvalues[taken_x[i]]
     return taken_x, taken_y
 
-def lagrange_interpolation(xvalues, yvalues, order, x):
-    EPS = 1e-8
-    for i in range (len(xvalues)):
-        if abs(xvalues[i] - x) <= EPS:
-            return yvalues[i]
+
+
+def lagrange_interpolation(taken_x, taken_y, order, x):
     required = order + 1
-    taken_x, taken_y = findNearestPoints(xvalues, yvalues, required, x)
     ans = 0
     b = np.empty(required)
     for i in range(required):
@@ -58,12 +57,35 @@ def lagrange_interpolation(xvalues, yvalues, order, x):
         ans += b[i] * taken_y[i]
     return ans
 
-xvalues = list()
-yvalues = list()
-with open("gene.txt", "r") as file:
+
+days = list()
+index = list()
+
+
+with open("stock.txt", "r") as file:
+    idx = 0
     for line in file:
-        xvalues.append(float(line.split()[0]))
-        yvalues.append(float(line.split()[1]))
-        
-print(lagrange_interpolation(xvalues, yvalues, 3, 17))
-print(lagrange_interpolation(xvalues, yvalues, 2, 17))
+        if idx > 0:
+            # print(line)
+            days.append(float(line.split()[0]))
+            index.append(float(line.split()[1]))
+        idx = idx + 1
+# print(days, index)
+
+x = float(input())
+
+takenXCubic, takenYCubic = findNearestPoints(days, index, 4, x)
+cubicAns = lagrange_interpolation(takenXCubic, takenYCubic, 3, x)
+takenXQuadratic, takenYQuadratic = findNearestPoints(days, index, 3, x)
+quadraticAns = lagrange_interpolation(takenXQuadratic, takenYQuadratic, 2, x)
+print(f'Answer using cubic interpolation: {cubicAns}')
+print(f'Answer using quadratic interpolation: {quadraticAns}')
+error = abs((cubicAns - quadraticAns) / cubicAns) * 100
+print(f'Absolute Relative Approximate Error: {error}%')
+
+pt.plot(days, index, "g", [x,x], [-1.5, cubicAns], "b")
+pt.legend(["Curve", "Estimation"])
+pt.grid(True, which="both")
+pt.show()
+
+
