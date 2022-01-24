@@ -28,8 +28,14 @@ def integration_simpsons_multiple(func, a, b, n):
     assert n % 2 == 0
     ans = 0
     h = (b - a) / n
-    for i in range(0, n, 2):
-        ans = ans + integration_simpsons_single(func, a + i * h, a + (i + 2) * h)
+    
+    for i in range(1, n):
+        ans = ans + ((i % 2) * 2 + 2) * func(a + i * h)
+    ans = (ans + func(a) + func(b)) * (h / 3)
+    
+    # for i in range(0, n, 2):
+    #     ans = ans + integration_simpsons_single(func, a + i * h, a + (i + 2) * h)
+    
     return ans
     
 # analytical_answer = 17738697.18
