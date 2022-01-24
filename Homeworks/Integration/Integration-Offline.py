@@ -66,9 +66,13 @@ y = integration_simpsons_multiple(func, C_initial, x, 10) / 3600
 pt.plot(x, y, "p-")
 pt.xlabel("Concentration (moles/cc)")
 pt.ylabel("Time (Hour)")
+pt.grid(True, which='both')
 pt.show()
     
     
     
 
     
+
+
+
