@@ -40,13 +40,15 @@ def integration_simpsons_multiple(func, a, b, n):
     
 # analytical_answer = 17738697.18
 
+n = int(input())
+
 # Problem 1
 previous_answer, error = None, None
 print('Trapezoidal Method:')
-for n in range (1, 6):
-    this_ans = integration_trapezoid(func, C_initial, 0.5 * C_initial, n)
+for i in range (1, n+1):
+    this_ans = integration_trapezoid(func, C_initial, 0.5 * C_initial, i)
     print(f'n = {n} Result: {format(this_ans, ".6f")} seconds Error: ', end='')
-    if n > 1:
+    if i > 1:
         error = abs((this_ans - previous_answer) / this_ans) * 100
         print(f'{format(error, ".6f")}%')
     else:
@@ -55,10 +57,10 @@ for n in range (1, 6):
 
 # Problem 2
 print('Simpson\'s 1/3rd Rule:')
-for n in range (1, 6):
-    this_ans = integration_simpsons_multiple(func, C_initial, 0.5 * C_initial, 2 * n)
+for i in range (1, n+1):
+    this_ans = integration_simpsons_multiple(func, C_initial, 0.5 * C_initial, 2 * i)
     print(f'n = {n} Result: {format(this_ans, ".6f")} seconds Error: ', end='')
-    if n > 1:
+    if i > 1:
         error = abs((this_ans - previous_answer) / this_ans) * 100
         print(f'{format(error, ".6f")}%')
     else:
