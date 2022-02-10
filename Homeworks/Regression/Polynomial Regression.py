@@ -29,7 +29,7 @@ def GaussianElimination(A, B, pivot=True, showall=False):
             if showall:
                 print(f'Sub-step {sub_step+1}:\nA:\n{A}\nB:\n{B}\n')
 
-    matAns = np.empty((n, 1), dtype='float64')
+    matAns = np.empty((n, 1))
 
     # Back Substitution
     assert not A[n-1][n-1] == 0
