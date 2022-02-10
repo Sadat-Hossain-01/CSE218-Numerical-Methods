@@ -1,8 +1,9 @@
 import numpy as np
-np.set_printoptions(suppress=True, formatter={'float': '{:0.6f}'.format})
+import matplotlib.pyplot as pt
+np.set_printoptions(suppress=True, formatter={'float': '{:0.15f}'.format})
 
 def GaussianElimination(A, B, pivot=True, showall=False):
-    shape1, shape2 = np.shape(matA), np.shape(matB)
+    shape1, shape2 = np.shape(A), np.shape(B)
     assert shape1[0] == shape1[1] and shape1[0] == shape2[0] and shape2[1] == 1
     n = shape1[0]
 
@@ -28,7 +29,7 @@ def GaussianElimination(A, B, pivot=True, showall=False):
             if showall:
                 print(f'Sub-step {sub_step+1}:\nA:\n{A}\nB:\n{B}\n')
 
-    matAns = np.empty((n, 1))
+    matAns = np.empty((n, 1), dtype='float64')
 
     # Back Substitution
     assert not A[n-1][n-1] == 0
@@ -42,7 +43,6 @@ def GaussianElimination(A, B, pivot=True, showall=False):
         matAns[i] = (B[i][0]-sum)/A[i][i]
 
     return matAns
-
 
 def polynomial_regression(xvalues, yvalues, order):
     n = xvalues.size
@@ -69,10 +69,26 @@ def polynomial_regression(xvalues, yvalues, order):
             matB[degree][0] = matB[degree][0] + temp
             temp = temp * xvalues[i]
             
+    # print(matA, end='\n\n')
+    # print(matB, end='\n\n')
+         
     all_coeffs = GaussianElimination(matA, matB)
+    yplot = np.zeros((n))
+    for i in range(m+1):
+        yplot = yplot + all_coeffs[i][0] * np.power(xvalues, i)
     
+    # Let's do the plot
+    pt.plot(xvalues, yvalues, "ro")
+    xvals_np = np.arange(0, xvalues[n-1] + 1, 0.01)
+    pt.plot(xvalues, yplot, "c-")
+    pt.legend(["Data Points", "Fitted Curve"])
+    pt.title("Polynomial Regression of Order " + str(order))
+    pt.xlabel("x")
+    pt.ylabel("y")
+    pt.show()
+        
     return all_coeffs
 
 
-print(polynomial_regression(np.array([80, 40, -40, -120, -200, -280, -340]), np.array([6.47, 6.24, 5.72, 5.09, 4.30, 3.33, 2.45]) * 1e-6, 2))    
+print(polynomial_regression(np.array([80, 40, -40, -120, -200, -280, -340]), np.array([6.47, 6.24, 5.72, 5.09, 4.30, 3.33, 2.45]) * 1e-6, 2))
             
