@@ -6,7 +6,7 @@ def linear_regression(xvalues, yvalues):
     # a_1 = (n*productsum - xsum * ysum) / (n*xsquaresum - (xsum)^2)
     # a_0 = yavg - a_1 * xavg
     
-    n = len(xvalues)
+    n = xvalues.size
     xsum, xsquaresum, ysum, productsum = 0, 0, 0, 0
     for x in xvalues:
         xsum += x
@@ -31,4 +31,4 @@ def linear_regression(xvalues, yvalues):
     
     return (a0, a1)
 
-print(linear_regression([0.698132, 0.959931, 1.134464, 1.570796, 1.919862], [0.188224, 0.209138, 0.230052, 0.250965, 0.313707]))
+print(linear_regression(np.array([0.698132, 0.959931, 1.134464, 1.570796, 1.919862]), np.array([0.188224, 0.209138, 0.230052, 0.250965, 0.313707])))

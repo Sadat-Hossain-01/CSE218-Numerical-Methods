@@ -1,17 +1,8 @@
-# x^2 + y^2 + ax + by + c = 0 passes through (-2, 0), (-1, 7), (5, -1)
-# Answer for the above sample should be (a, b, c) = (-4, -6, -12)
-
-# -2a + c = -4
-# -a + 7b + c = -50
-# 5a - b + c = -26
-
-
 import numpy as np
-np.set_printoptions(suppress=True, formatter={'float': '{:0.4f}'.format})
+np.set_printoptions(suppress=True, formatter={'float': '{:0.6f}'.format})
 
-
-def GaussianElimination(A, B, pivot=True, showall=True):
-    shape1, shape2 = np.shape(A), np.shape(B)
+def GaussianElimination(A, B, pivot=True, showall=False):
+    shape1, shape2 = np.shape(matA), np.shape(matB)
     assert shape1[0] == shape1[1] and shape1[0] == shape2[0] and shape2[1] == 1
     n = shape1[0]
 
@@ -53,21 +44,35 @@ def GaussianElimination(A, B, pivot=True, showall=True):
     return matAns
 
 
-n = int(input())
-matA = np.empty((n, n))
-matB = np.empty((n, 1))
-for i in range(n):
-    matA[i] = [float(x) for x in input().split()]
+def polynomial_regression(xvalues, yvalues, order):
+    n = xvalues.size
+    
+    matA = np.empty((order+1, order+1))
+    matA[0][0] = n
+    m = order
+    # all_summations_x[i] will hold the summation of all x**i 
+    all_summations_x = np.zeros((2*m+1))
+    all_summations_x[0] = n
+    for x in xvalues:
+        temp = 1
+        for degree in range(1, 2*m+1):
+            temp = temp * x
+            all_summations_x[degree] = all_summations_x[degree] + temp
+    for row in range(order+1):
+        for col in range(order+1):
+            matA[row][col] = all_summations_x[row+col]
+            
+    matB = np.zeros((m+1, 1))
+    for i in range(n):
+        temp = yvalues[i]
+        for degree in range(0, m+1):
+            matB[degree][0] = matB[degree][0] + temp
+            temp = temp * xvalues[i]
+            
+    all_coeffs = GaussianElimination(matA, matB)
+    
+    return all_coeffs
 
-for i in range(n):
-    matB[i][0] = float(input())
 
-# n = 3
-# matA = np.array([[25, 5, 1], [64, 8, 1], [144, 12, 1]], dtype='float64')
-# matB = np.array([[106.8], [177.2], [279.2]], dtype='float64')
-# print(matA, matB, sep='\n\n', end='\n\n')
-
-ret = GaussianElimination(matA, matB)
-print('Solution Vector:')
-for i in range(n):
-    print(f'{ret[i][0]:.4f}')
+print(polynomial_regression(np.array([80, 40, -40, -120, -200, -280, -340]), np.array([6.47, 6.24, 5.72, 5.09, 4.30, 3.33, 2.45]) * 1e-6, 2))    
+            
