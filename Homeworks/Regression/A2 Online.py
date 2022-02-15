@@ -74,8 +74,9 @@ all_coeffs = concised_polynomial_regression(xvalues, yvalues, m)
 print(all_coeffs)
     
 pt.plot(xvalues, yvalues, "ro")
+pt.show()
 
-xvals_np = np.arange(-5, 115, 0.01)
+xvals_np = np.arange(-5, 115, 1)
 yplot = np.zeros((xvals_np.size))
 for i in range(m + 1):
     yplot += all_coeffs[i][0] * np.power(xvals_np, i)
