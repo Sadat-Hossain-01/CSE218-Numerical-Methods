@@ -24,18 +24,41 @@ def linear_regression(xvalues, yvalues):
     
     return (a, b)
 
+# A1
 
-xvalues = np.array([0.698132, 0.959931, 1.134464, 1.570796, 1.919862])
-yvalues = np.array([0.188224, 0.209138, 0.230052, 0.250965, 0.313707])
-ret = linear_regression(xvalues, yvalues)
+xvalues = np.array([4.96, 3.02, 12.36, 10.6, 4.45, 6.4, 1.58, 2.9, 7.55, 0.41])
+yvalues = np.array([3.98, 2, 5.28, 4.09, 2.75, 3.04, 3.67, 3.45, 4.35, 1.53])
+ret = linear_regression(np.exp(xvalues)/xvalues, yvalues/xvalues)
+a = ret[0]
+b = ret[1]
+print(a, b)
 
 # Let's do the plot
 n = xvalues.size
 pt.plot(xvalues, yvalues, "ro")
-xvals_np = np.arange(xvalues[0] - 0.2, xvalues[n-1] + 0.2, 0.01)
-pt.plot(xvals_np, ret[0] + ret[1] * xvals_np, "c-")
+xvals_np = np.arange(0.4, 12.4, 0.01)
+pt.plot(xvals_np, a * xvals_np + b * np.exp(xvals_np), "c-")
 pt.legend(["Data Points", "Regressed Curve"])
-pt.title("Linear Regression")
+pt.title("Regression")
+pt.xlabel("x")
+pt.ylabel("y")
+pt.grid(True, which='both')
+pt.show()
+
+# A2
+
+ret = linear_regression(1/xvalues**2, 1/yvalues)
+a = 1 / ret[0]
+b = ret[1] * a
+print(a, b)
+
+# Let's do the plot
+n = xvalues.size
+pt.plot(xvalues, yvalues, "ro")
+xvals_np = np.arange(0.4, 12.4, 0.01)
+pt.plot(xvals_np, (a * xvals_np * xvals_np) / (b + xvals_np * xvals_np), "c-")
+pt.legend(["Data Points", "Regressed Curve"])
+pt.title("Regression")
 pt.xlabel("x")
 pt.ylabel("y")
 pt.grid(True, which='both')

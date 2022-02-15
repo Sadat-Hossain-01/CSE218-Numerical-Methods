@@ -29,7 +29,7 @@ def GaussianElimination(A, B, pivot=True, showall=False):
             if showall:
                 print(f'Sub-step {sub_step+1}:\nA:\n{A}\nB:\n{B}\n')
 
-    matAns = np.empty((n, 1))
+    matAns = np.empty((n, 1), dtype='float64')
 
     # Back Substitution
     assert not A[n-1][n-1] == 0
@@ -42,53 +42,62 @@ def GaussianElimination(A, B, pivot=True, showall=False):
         assert not A[i][i] == 0
         matAns[i] = (B[i][0]-sum)/A[i][i]
 
-    return matAns
+    return matAns   
 
-def polynomial_regression(xvalues, yvalues, order):
+
+def polynomial_regression(xvalues, yvalues, m):
     n = xvalues.size
     
-    matA = np.empty((order+1, order+1))
+    matA = np.empty((m + 1, m + 1))
     matA[0][0] = n
-    m = order
+    
     # all_summations_x[i] will hold the summation of all x**i 
-    all_summations_x = np.zeros((2*m+1))
+    all_summations_x = np.zeros((2 * m + 1))
     all_summations_x[0] = n
+    
     for x in xvalues:
         temp = 1
-        for degree in range(1, 2*m+1):
+        for degree in range(1, 2 * m + 1):
             temp = temp * x
-            all_summations_x[degree] = all_summations_x[degree] + temp
-    for row in range(order+1):
-        for col in range(order+1):
-            matA[row][col] = all_summations_x[row+col]
+            all_summations_x[degree] += temp
+    for row in range(m + 1):
+        for col in range(m + 1):
+            matA[row][col] = all_summations_x[row + col]
             
-    matB = np.zeros((m+1, 1))
+            
+    matB = np.zeros((m + 1, 1), dtype='float64')
     for i in range(n):
         temp = yvalues[i]
-        for degree in range(0, m+1):
-            matB[degree][0] = matB[degree][0] + temp
+        for degree in range(0, m + 1):
+            matB[degree][0] += + temp
             temp = temp * xvalues[i]
             
     # print(matA, end='\n\n')
     # print(matB, end='\n\n')
          
     all_coeffs = GaussianElimination(matA, matB)
-    yplot = np.zeros((n))
-    for i in range(m+1):
-        yplot = yplot + all_coeffs[i][0] * np.power(xvalues, i)
-    
-    # Let's do the plot
-    pt.plot(xvalues, yvalues, "ro")
-    xvals_np = np.arange(0, xvalues[n-1] + 1, 0.01)
-    pt.plot(xvalues, yplot, "c-")
-    pt.legend(["Data Points", "Fitted Curve"])
-    pt.title("Polynomial Regression of Order " + str(order))
-    pt.xlabel("x")
-    pt.ylabel("y")
-    pt.show()
         
     return all_coeffs
 
 
-print(polynomial_regression(np.array([80, 40, -40, -120, -200, -280, -340]), np.array([6.47, 6.24, 5.72, 5.09, 4.30, 3.33, 2.45]) * 1e-6, 2))
-            
+# Let's do the plot
+m = 2
+xvalues = np.array([80, 40, -40, -120, -200, -280, -340], dtype = 'float64')
+yvalues = np.array([6.47, 6.24, 5.72, 5.09, 4.30, 3.33, 2.45], dtype='float64') * 1e-6
+n = xvalues.size
+all_coeffs = polynomial_regression(xvalues, yvalues, m)
+    
+pt.plot(xvalues, yvalues, "ro")
+
+xvals_np = np.arange(-400, 100, 0.1)
+yplot = np.zeros((n))
+for i in range(m + 1):
+    yplot += all_coeffs[i][0] * np.power(xvalues, i)
+pt.plot(xvalues, yplot, "c-")
+
+pt.legend(["Data Points", "Fitted Curve"])
+pt.title("Polynomial Regression of Order " + str(m))
+pt.xlabel("x")
+pt.ylabel("y")
+pt.grid(True, which='both')
+pt.show()            
