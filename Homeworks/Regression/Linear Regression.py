@@ -24,6 +24,19 @@ def linear_regression(xvalues, yvalues):
     
     return (a, b)
 
+def concised_linear_regression(xvalues, yvalues):
+    # y = a + b * x
+    # b = (n*productsum - xsum * ysum) / (n*xsquaresum - (xsum)^2)
+    # a = yavg - b * xavg
+    
+    n = xvalues.size
+    xsum, xsquaresum, ysum, xyproductsum = np.sum(xvalues), np.sum(xvalues*xvalues), np.sum(yvalues), np.sum(xvalues*yvalues)
+    
+    b = (n * xyproductsum - xsum * ysum) / (n * xsquaresum - xsum * xsum)
+    a = ysum / n - b * (xsum / n)
+    
+    return (a, b)
+
 
 xvalues = np.array([0.698132, 0.959931, 1.134464, 1.570796, 1.919862])
 yvalues = np.array([0.188224, 0.209138, 0.230052, 0.250965, 0.313707])
