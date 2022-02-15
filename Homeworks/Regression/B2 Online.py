@@ -35,7 +35,7 @@ print(a, b)
 # Let's do the plot
 pt.plot(real_x, real_y, "ro")
 n = real_x.size
-xvals_np = np.arange(0, real_x[-1] + 0.02, 0.01)
+xvals_np = np.arange(0, 0.22, 0.01)
 pt.plot(xvals_np, a*np.exp(b*xvals_np), "c-")
 pt.legend(["Data Points", "Fitted Curve"])
 pt.title("Exponential Model Regression")

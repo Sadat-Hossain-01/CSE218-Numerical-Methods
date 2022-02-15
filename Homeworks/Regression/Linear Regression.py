@@ -38,15 +38,19 @@ def concised_linear_regression(xvalues, yvalues):
     return (a, b)
 
 
-xvalues = np.array([0.698132, 0.959931, 1.134464, 1.570796, 1.919862])
-yvalues = np.array([0.188224, 0.209138, 0.230052, 0.250965, 0.313707])
-ret = linear_regression(xvalues, yvalues)
+xvalues = np.array([0,0.01,0.03,0.05,0.07,0.09,0.11,0.13,0.15,0.17,0.19,0.21], dtype='float64')
+yvalues = np.array([1,1.03,1.06,1.38,2.09,3.54,6.41,12.6,22.1,39.05,65.32,99.78], dtype='float64')
+
+ret = concised_linear_regression(xvalues, np.log(yvalues))
+a = np.exp(ret[0])
+b = ret[1]
+print(a, b)
 
 # Let's do the plot
 n = xvalues.size
 pt.plot(xvalues, yvalues, "ro")
-xvals_np = np.arange(xvalues[0] - 0.2, xvalues[n-1] + 0.2, 0.01)
-pt.plot(xvals_np, ret[0] + ret[1] * xvals_np, "c-")
+xvals_np = np.arange(0, 0.25, 0.01)
+pt.plot(xvals_np, a * np.exp(b * xvals_np), "c-")
 pt.legend(["Data Points", "Regressed Curve"])
 pt.title("Linear Regression")
 pt.xlabel("x")
