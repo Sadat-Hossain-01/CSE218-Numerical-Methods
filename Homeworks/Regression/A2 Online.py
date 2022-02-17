@@ -66,7 +66,7 @@ def concised_polynomial_regression(xvalues, yvalues, m):
     return all_coeffs
 
 
-m = 3
+m = 11
 xvalues = np.array([1900, 1920, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000], dtype = 'float64') - 1900
 yvalues = np.array([10.3, 13.5, 13.9, 14.2, 11.6, 10.3, 9.7, 9.6, 14.1, 19.8, 31.1], dtype='float64')
 n = xvalues.size
@@ -74,9 +74,8 @@ all_coeffs = concised_polynomial_regression(xvalues, yvalues, m)
 print(all_coeffs)
     
 pt.plot(xvalues, yvalues, "ro")
-pt.show()
 
-xvals_np = np.arange(-5, 115, 1)
+xvals_np = np.arange(-5, 115, 0.1)
 yplot = np.zeros((xvals_np.size))
 for i in range(m + 1):
     yplot += all_coeffs[i][0] * np.power(xvals_np, i)
